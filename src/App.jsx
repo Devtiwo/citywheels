@@ -1,10 +1,14 @@
 import "./App.css";
+import { BrowserRouter } from "react-router-dom";
+import Navbar from "./Components/Navbar";
+import Home from "./pages/Home";
 
 function App() {
   return (
-    <>
-      <h1>i am new to tailwind</h1>
-    </>
+    <BrowserRouter>
+      <Navbar />
+      <Home />
+    </BrowserRouter>
   );
 }
 
