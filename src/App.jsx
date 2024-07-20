@@ -1,10 +1,14 @@
 import "./App.css";
+import { BrowserRouter } from "react-router-dom";
+import ScrollToHashElement from "@cascadia-code/scroll-to-hash-element";
+import Home from "./pages/Home";
 
 function App() {
   return (
-    <>
-      <h1>i am new to tailwind</h1>
-    </>
+    <BrowserRouter>
+      <ScrollToHashElement behavior="smooth"/>
+      <Home />
+    </BrowserRouter>
   );
 }
 
