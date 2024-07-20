@@ -8,7 +8,7 @@ const Navbar = () => {
   const [isNavExpanded, setIsNavExpanded] = useState(false);
   const links = [
     {
-      path: "#home",
+      path: "/home",
       text: "Home"
     },
     {
@@ -16,16 +16,12 @@ const Navbar = () => {
       text: "How it works"
     },
     {
-      path: "#about",
+      path: "#aboutus",
       text: "About Us"
     },
     {
-      path: "#Whychooseus",
+      path: "#whychooseus",
       text: "Why choose us"
-    },
-    {
-      path: "#reviews",
-      text: "Reviews"
     }
   ]
   const toggleMenu = () => {
@@ -41,7 +37,7 @@ const Navbar = () => {
        <div onClick={() => setIsNavExpanded(false)} className={isNavExpanded ? `${style.navlinksmob}` : `${style.navlinks}`}>
         <ul className={style.navwrap}>
           {links.map((link, index) => (
-            <li key={index} className={style.navitems}><a href={link.path}>{link.text}</a></li>
+            <li key={index} className={style.navitems}><Link to={link.path}>{link.text}</Link></li>
           ))}
           <ul>
          <li className={style.log}><Link to="/login">Login</Link></li>

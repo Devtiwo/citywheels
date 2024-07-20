@@ -40,3 +40,16 @@
 .margin {
   margin-bottom: 200px;
 }
+
+footer {
+  height: auto;
+  background-image: url("/images/footerback.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+small {
+  margin: 0 auto;
+}
+

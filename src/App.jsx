@@ -1,12 +1,12 @@
 import "./App.css";
 import { BrowserRouter } from "react-router-dom";
-import Navbar from "./Components/Navbar";
+import ScrollToHashElement from "@cascadia-code/scroll-to-hash-element";
 import Home from "./pages/Home";
 
 function App() {
   return (
     <BrowserRouter>
-      <Navbar />
+      <ScrollToHashElement behavior="smooth"/>
       <Home />
     </BrowserRouter>
   );
