@@ -4,11 +4,11 @@ import App from './App.jsx'
 import './index.css'
 import {configureStore} from "@reduxjs/toolkit";
 import {Provider} from "react-redux";
-import userReducer from "./Redux/userSlice.js";
+import authReducer from "./Redux/authSlice.js";
 
 const store = configureStore({
   reducer: {
-    user: userReducer,
+    auth: authReducer,
   }
 });
 
