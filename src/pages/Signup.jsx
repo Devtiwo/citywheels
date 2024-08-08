@@ -10,6 +10,7 @@ const Signup = () => {
       fname: "",
       lname: "",
       email: "",
+      password: "",
       address: "",
       city: "",
       state: "",
@@ -22,6 +23,7 @@ const Signup = () => {
         .string()
         .required("Enter your email")
         .email("Enter a valid email"),
+      password: yup.string().required("Enter password"),
       address: yup.string().required("Enter your street address"),
       city: yup.string().required("Enter your city"),
       state: yup.string().required("Select your state"),
@@ -267,6 +269,22 @@ const Signup = () => {
                 value={formik.values.email}
               />
               <small className="text-rose-700 font-medium ml-2 mt-1">{formik.touched.email && formik.errors.email}</small>
+            </div>
+            <div className="flex flex-col mb-2 w-full lg:w-4/5 mx-auto">
+              <label htmlFor="password" className="font-medium mb-1">
+                Password
+              </label>
+              <input
+                type="password"
+                className="px-2 py-2 outline-0 rounded-lg border-2 border-lime-500"
+                id="password"
+                name="password"
+                placeholder="Password"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.valuespassword}
+              />
+              <small className="text-rose-700 font-medium ml-2 mt-1">{formik.touched.password && formik.errors.password}</small>
             </div>
             <div className="flex flex-col mb-2 w-full lg:w-4/5 mx-auto">
               <label htmlFor="Address" className="font-medium mb-1">

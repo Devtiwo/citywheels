@@ -18,5 +18,9 @@ export const authSplice = createSlice({
   }
 });
 
+export const signup = () => {
+  axios.post("");
+}
+
 export const { loginSuccess, logoutSuccess } = authSplice.actions;
 export default authSplice.reducer;
