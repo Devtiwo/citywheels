@@ -1,15 +1,37 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import  {signup} from "../Redux/authSlice";
 
 const Signup = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { message, status} = useSelector((state) => state.auth);
+  const [countdown, setCountdown] = useState(10);
+
+  useEffect(() => {
+    if(status === "succeeded") {
+      const timer = setInterval(() => {
+        setCountdown((prevCountdown) => prevCountdown -1);
+      }, 1000);
+      const redirectTimeout = setTimeout(() => {
+        navigate("/login");
+      }, countdown * 1000);
+      return () => {
+        clearInterval(timer);
+        clearTimeout(redirectTimeout);
+      };
+    }
+  }, [status, navigate, countdown]);
+
   const formik = useFormik({
     initialValues: {
       fname: "",
       lname: "",
       email: "",
+      password: "",
       address: "",
       city: "",
       state: "",
@@ -22,6 +44,7 @@ const Signup = () => {
         .string()
         .required("Enter your email")
         .email("Enter a valid email"),
+      password: yup.string().required("Enter password").min(8,"Password must be at least 8 characters long"),
       address: yup.string().required("Enter your street address"),
       city: yup.string().required("Enter your city"),
       state: yup.string().required("Select your state"),
@@ -31,7 +54,19 @@ const Signup = () => {
         .min(10000, "Enter a valid zipcode")
         .max(99999, "Enter a valid zipcode"),
     }),
-    onSubmit: () => {},
+    onSubmit: async (values, {resetForm, setStatus}) => {
+      try {
+        const result = await dispatch(signup(values));
+        if (signup.fulfilled.match(result)) {
+          resetForm();
+        } else {
+          setStatus(result.payload);
+        }
+      } catch (error) {
+        console.error("Signup error:", error);
+        setStatus("An uexpected error occured!");
+      }
+    }
   });
   return (
     <section className="h-screen p-8">
@@ -211,11 +246,13 @@ const Signup = () => {
           </div>
         </div>
         <div className="bg-gradient-to-r from-lime-50 to-white p-8">
+         {message && (<div className="text-center text-sm font-bold" style={{color: status === "failed" ? "red" : "green"}}>
+         {message}{status === "succeeded" && (<p>redirecting to login page in {countdown} seconds...</p>)}</div>)}
           <h2 className="text-center text-3xl font-medium mt-5">
             Let's get you started
           </h2>
           <form className="p-5 mt-3 w-4/5 mx-auto" autoComplete="off"
-          action="/" method="POST" onSubmit={formik.handleSubmit}>
+           method="POST" onSubmit={formik.handleSubmit}>
             <div className="flex flex-col mb-2 w-full lg:w-4/5 mx-auto">
               <label htmlFor="fname" className="font-medium mb-1">
                 First Name
@@ -267,6 +304,22 @@ const Signup = () => {
                 value={formik.values.email}
               />
               <small className="text-rose-700 font-medium ml-2 mt-1">{formik.touched.email && formik.errors.email}</small>
+            </div>
+            <div className="flex flex-col mb-2 w-full lg:w-4/5 mx-auto">
+              <label htmlFor="password" className="font-medium mb-1">
+                Password
+              </label>
+              <input
+                type="password"
+                className="px-2 py-2 outline-0 rounded-lg border-2 border-lime-500"
+                id="password"
+                name="password"
+                placeholder="Password"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.password}
+              />
+              <small className="text-rose-700 font-medium ml-2 mt-1">{formik.touched.password && formik.errors.password}</small>
             </div>
             <div className="flex flex-col mb-2 w-full lg:w-4/5 mx-auto">
               <label htmlFor="Address" className="font-medium mb-1">
