@@ -10,9 +10,9 @@ let userSchema = mongoose.Schema({
   state: { type: String, required: true },
   zipcode: { type: Number, required: true },
   roles: {
-    type: [String],
+    type: String,
     enum: ["user", "admin"],
-    default: ["user"]
+    default: "user"
   }
 });
 
