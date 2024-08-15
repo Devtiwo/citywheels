@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+let saltRound = 10;
 
 let userSchema = mongoose.Schema({
   fname: { type: String, required: true },
@@ -13,6 +15,20 @@ let userSchema = mongoose.Schema({
     type: String,
     enum: ["user", "admin"],
     default: "user"
+  }
+});
+
+userSchema.pre("save", async function(next) {
+  if (this.isModified('password') || this.isNew) {
+    try {
+      const hashedPassword = await bcrypt.hash(this.password, saltRound);
+      this.password = hashedPassword;
+      next();
+    } catch (err) {
+      next(err);
+    }
+  } else {
+    next();
   }
 });
 
