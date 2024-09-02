@@ -1,6 +1,7 @@
 const userModel = require("../models/user.model");
+const jwt = require("jsonwebtoken");
 
-const createAccount = async (req, res) => {
+const register = async (req, res) => {
   const { email, fname, lname, password, address, city, state, zipcode } = req.body;
   try {
     const existingUser = await userModel.findOne({ email });
@@ -29,6 +30,60 @@ const createAccount = async (req, res) => {
   }
 };
 
-const login = () => {};
+const login = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    if (!email || !password) {
+      res.send({
+        status: false,
+        message: "Email and password required!"
+      });
+    }
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      return res.send({
+        status: false,
+        message: "user does not exist. visit the signup page to register!"
+      });
+    }
+    const isMatch = await user.validatePassword(password);
+    if (!isMatch) {
+      return res.send({
+        status: false,
+        message: "Invalid login credentials!"
+      });
+    }
+    const token = jwt.sign({email}, process.env.JWT_SECRET, {expiresIn: "1h"});
+    console.log(token)
+    res.send({
+      status: true,
+      message: "Login successful",
+      token
+    });
+  } catch (err) {
+    res.send({
+      status: false,
+      message: "An error occurred! check your internet connection"
+    })
+  }
+};
 
-module.exports = { createAccount, login };
+const getDashboard = (req, res) => {
+  let token = req.headers.authorization.split(" ")[1];
+  jwt.verify(token, process.env.JWT_SECRET, (err, result) => {
+    if(err) {
+      res.send({
+        status: false,
+        message: "token is invalid"
+      });
+    } else {
+      res.send({
+        status: true,
+        message: "token is valid",
+        user: result
+      })
+    }
+  });
+}
+
+module.exports = { register, login, getDashboard };

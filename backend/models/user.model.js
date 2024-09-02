@@ -32,6 +32,17 @@ userSchema.pre("save", async function(next) {
   }
 });
 
+userSchema.methods.validatePassword = function(password) {
+  return new Promise((resolve, reject) => {
+    bcrypt.compare(password, this.password, (err, isMatch) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(isMatch);
+    });
+  });
+}
+
 let userModel = mongoose.model("users", userSchema, "users");
 
 module.exports = userModel;

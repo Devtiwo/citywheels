@@ -9,7 +9,7 @@ const Signup = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { message, status} = useSelector((state) => state.auth);
-  const [countdown, setCountdown] = useState(10);
+  const [countdown, setCountdown] = useState(7);
 
   useEffect(() => {
     if(status === "succeeded") {
@@ -69,7 +69,7 @@ const Signup = () => {
     }
   });
   return (
-    <section className="h-screen p-8">
+    <section className="p-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 container mx-auto shadow-2xl rounded-3xl my-5">
         <div className="bg-gradient-to-r from-white to-lime-50 p-8">
           <div className="m-5">
